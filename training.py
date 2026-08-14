@@ -338,237 +338,44 @@ PHOTO_FAULT_KEYS = [f"photo_fault_{index}" for index in range(1, len(PHOTO_CHALL
 
 
 def render_central_heating_diagram():
-    """Interactive central heating system diagram - closed circuit"""
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        st.markdown("""
-        <style>
-            .heating-circuit {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-                padding: 2rem;
-                background: linear-gradient(135deg, #f5f7fa 0%, #eff2f6 100%);
-                border-radius: 12px;
-                margin: 1rem 0;
-                position: relative;
-                border: 2px solid #d0d7de;
-            }
-            
-            .left-column {
-                display: flex;
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            
-            .right-column {
-                display: flex;
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            
-            .boiler-box {
-                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-                padding: 1.5rem;
-                border-radius: 8px;
-                color: white;
-                text-align: center;
-                font-weight: 700;
-                box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-            }
-            
-            .thermostat-box {
-                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-                padding: 1.5rem;
-                border-radius: 8px;
-                color: white;
-                text-align: center;
-                font-weight: 700;
-                box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-                font-size: 0.95rem;
-            }
-            
-            .radiators-box {
-                background: white;
-                padding: 1.5rem;
-                border-radius: 8px;
-                border: 2px solid #dfe6e9;
-            }
-            
-            .room-item {
-                margin: 0.6rem 0;
-                padding: 0.7rem;
-                background: #ecf0f1;
-                border-radius: 6px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 0.9rem;
-            }
-            
-            .room-name {
-                font-weight: 600;
-                color: #2c3e50;
-            }
-            
-            .radiator-status {
-                font-size: 0.85rem;
-                color: #7f8c8d;
-            }
-            
-            .flow-path {
-                text-align: center;
-                font-size: 1.3rem;
-                color: #ff6b6b;
-                margin: 0.5rem 0;
-                animation: flow 2s infinite;
-                font-weight: 700;
-            }
-            
-            .return-path {
-                text-align: center;
-                font-size: 1.3rem;
-                color: #3498db;
-                margin: 0.5rem 0;
-                animation: flow-reverse 2s infinite;
-                font-weight: 700;
-            }
-            
-            .circuit-label {
-                text-align: center;
-                font-size: 0.85rem;
-                color: #7f8c8d;
-                font-weight: 600;
-                margin-top: 0.3rem;
-            }
-            
-            .circuit-title {
-                text-align: center;
-                background: #fff;
-                padding: 1rem;
-                border-radius: 8px;
-                border: 2px solid #e74c3c;
-                color: #e74c3c;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-            }
-            
-            .legend {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-                margin-top: 1.5rem;
-                padding: 1rem;
-                background: white;
-                border-radius: 8px;
-            }
-            
-            .legend-item {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                font-size: 0.9rem;
-            }
-            
-            .legend-color {
-                width: 20px;
-                height: 20px;
-                border-radius: 3px;
-            }
-            
-            @keyframes flow {
-                0%, 100% { opacity: 1; transform: translateY(0); }
-                50% { opacity: 0.6; transform: translateY(4px); }
-            }
-            
-            @keyframes flow-reverse {
-                0%, 100% { opacity: 1; transform: translateY(0); }
-                50% { opacity: 0.6; transform: translateY(-4px); }
-            }
-        </style>
-        
-        <div class="circuit-title">🔄 GESLOTEN CIRCUIT — Warmtecirculatie</div>
-        
-        <div class="heating-circuit">
-            <div class="left-column">
-                <div class="boiler-box">
-                    🔥 KETEL<br><span style="font-size: 0.85rem; margin-top: 0.5rem;">Verwarmt water<br>tot 60-80°C</span>
-                </div>
-                <div class="flow-path">↓ HETE WATER UIT<br><span class="circuit-label">Druk via leidingen</span></div>
-                <div class="thermostat-box">
-                    🌡️ THERMOSTAAT<br><span style="font-size: 0.8rem; margin-top: 0.3rem;">Meet temp: 19°C<br>Gewenst: 20°C<br>Status: AAN</span>
-                </div>
-            </div>
-            
-            <div class="right-column">
-                <div class="radiators-box">
-                    <strong style="font-size: 0.95rem;">🔥 Radiatoren & Leidingen</strong>
-                    <div class="room-item">
-                        <span class="room-name">🏠 Woonkamer</span>
-                        <span class="radiator-status">Kraan: 5 (open)</span>
-                    </div>
-                    <div class="room-item">
-                        <span class="room-name">🍳 Keuken</span>
-                        <span class="radiator-status">Kraan: 3 (half)</span>
-                    </div>
-                    <div class="room-item">
-                        <span class="room-name">🛏️ Slaapkamer</span>
-                        <span class="radiator-status">Kraan: 2 (laag)</span>
-                    </div>
-                    <div class="room-item">
-                        <span class="room-name">🚿 Badkamer</span>
-                        <span class="radiator-status">Kraan: 4 (hoog)</span>
-                    </div>
-                </div>
-                <div class="return-path">↑ KOELER WATER TERUG<br><span class="circuit-label">Via retourleidingen naar ketel</span></div>
-            </div>
-        </div>
-        
-        <div style="padding: 1.5rem; background: white; border-radius: 8px; border-left: 4px solid #e74c3c; margin-top: 1.5rem;">
-            <strong>🔄 Hoe het gesloten circuit werkt:</strong><br><br>
-            1. <strong>Ketel</strong> verwarmt water tot 60-80°C<br>
-            2. <strong>Thermostaat</strong> regelt: Ketel AAN als temp &lt; 20°C<br>
-            3. <strong>Hete water</strong> wordt via leidingen naar alle <strong>radiatoren</strong> gedrukt<br>
-            4. <strong>Radiatorkranen</strong> (0-5) regelen hoeveel warmte elke radiator afgeeft<br>
-            5. <strong>Radiatoren</strong> geven warmte af in de kamers<br>
-            6. <strong>Gekoeld water</strong> stroomt via retourleidingen terug naar de <strong>ketel</strong><br>
-            7. Dit proces herhaalt zich — het is een <strong>gesloten circuit</strong> (water gaat niet verloren)
-        </div>
-        
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background: #ff6b6b;"></div>
-                <span><strong>🔥 Hete water UIT:</strong> 60-80°C</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #3498db;"></div>
-                <span><strong>❄️ Koeler water TERUG:</strong> ~30-40°C</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #ecf0f1;"></div>
-                <span><strong>Radiatoren:</strong> Geven warmte af</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #e74c3c;"></div>
-                <span><strong>Gesloten circuit:</strong> Water circulatie</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("**💡 Voordelen gesloten circuit:**")
-        st.write("✓ Water gaat niet verloren")
-        st.write("✓ Efficiënt — hergebruik warmte")
-        st.write("✓ Geen lek → besparing")
-        st.write("✓ Constante druk in systeem")
-        st.write("")
-        st.markdown("**⚠️ Tips:**")
-        st.write("✓ Controleer op lekken")
-        st.write("✓ Thermostaat op thermostaatruimte stand 5")
-        st.write("✓ Andere kamers naar behoefte lager")
-        st.write("✓ Radiatoren niet afdekken")
 
+    st.subheader("🔄 Gesloten circuit - Centrale verwarming")
+
+    col1 = st.columns(2)
+
+    with col1:
+
+        st.error("""
+🔥 KETEL
+
+Verwarmt water tot 60-80°C
+""")
+
+        st.markdown("### ⬇️ Hete water aanvoer")
+        st.caption("Warm water stroomt via de leidingen")
+
+        st.info("""
+🌡️ THERMOSTAAT
+
+Gemeten temperatuur: 19°C
+
+Gewenste temperatuur: 20°C
+
+Status: KETEL AAN
+""")
+
+   
+    st.markdown("""
+### Hoe werkt het gesloten circuit?
+
+1. Ketel verwarmt water tot 60-80°C.
+2. Thermostaat meet de temperatuur.
+3. Warm water stroomt naar de radiatoren.
+4. Radiatorkranen regelen de warmteafgifte.
+5. De kamers worden verwarmd.
+6. Het afgekoelde water stroomt terug naar de ketel.
+7. Het water blijft circuleren in een gesloten circuit.
+""")
 
 def reset_session_keys(keys):
     for key in keys:
