@@ -336,12 +336,11 @@ PRACTICE_KEYS = [question["key"] for questions in PRACTICE_SECTIONS.values() for
 QUIZ_KEYS = [question["key"] for questions in QUIZ_SECTIONS.values() for question in questions]
 PHOTO_FAULT_KEYS = [f"photo_fault_{index}" for index in range(1, len(PHOTO_CHALLENGES) + 1)]
 
-
 def render_central_heating_diagram():
 
     st.subheader("🔄 Gesloten circuit - Centrale verwarming")
 
-    col1 = st.columns(2)
+    col1, col2 = st.columns(2)
 
     with col1:
 
@@ -364,17 +363,31 @@ Gewenste temperatuur: 20°C
 Status: KETEL AAN
 """)
 
-   
+    with col2:
+
+        st.info("""
+⬅️ RETOURLEIDING
+
+Koeler water (ongeveer 30-40°C)
+stroomt terug naar de ketel.
+""")
+
+        st.success("🏠 Woonkamer - Kraan 5 (open)")
+        st.success("🍳 Keuken - Kraan 3 (half)")
+        st.success("🛏️ Slaapkamer - Kraan 2 (laag)")
+        st.success("🚿 Badkamer - Kraan 4 (hoog)")
+
+    st.divider()
+
     st.markdown("""
 ### Hoe werkt het gesloten circuit?
 
-1. Ketel verwarmt water tot 60-80°C.
-2. Thermostaat meet de temperatuur.
-3. Warm water stroomt naar de radiatoren.
-4. Radiatorkranen regelen de warmteafgifte.
-5. De kamers worden verwarmd.
-6. Het afgekoelde water stroomt terug naar de ketel.
-7. Het water blijft circuleren in een gesloten circuit.
+1. De ketel verwarmt water.
+2. Warm water stroomt naar de radiatoren.
+3. De radiatorkranen regelen de warmteafgifte.
+4. De kamers warmen op.
+5. Het afgekoelde water stroomt terug naar de ketel.
+6. Het systeem vormt een gesloten circuit.
 """)
 
 def reset_session_keys(keys):
@@ -407,7 +420,7 @@ def render_lessons():
     topic_tabs = st.tabs(["Verwarming", "Elektriciteit", "Water"])
 
     with topic_tabs[0]:
-        render_heating_table()
+        
         st.markdown("### Centrale verwarming — basisprincipe")
         st.write(
             "Centrale verwarming werkt zo: een ketel verwarmt water tot hoge temperatuur. "
@@ -452,7 +465,7 @@ def render_lessons():
         st.markdown("### Thermostaat = doeltemperatuur")
         st.markdown("### 🔥 Thermostaatkraan = hoeveel warmte de radiator mag geven")
         st.write("Thermostaat = doeltemperatuur. De radiatorkraan regelt hoeveel warmte de radiator mag afgeven.")
-
+        render_heating_table()
     with topic_tabs[1]:
         st.write(
             "Grote verbruikers zijn toestellen die warmte of koude maken: droogkast, oven, "
