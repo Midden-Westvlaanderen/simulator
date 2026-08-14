@@ -419,8 +419,25 @@ def render_training_module():
 def render_lessons():
     topic_tabs = st.tabs(["Verwarming", "Elektriciteit", "Water"])
 
+    # VERWARMING:
+
     with topic_tabs[0]:
-        
+
+     heating_tabs = st.tabs([
+        "🏠 Centrale verwarming",
+        "🔥 Decentrale verwarming",
+        "🏢 Collectieve verwarming"
+])
+
+    with heating_tabs[0]:
+        st.write("Centrale verwarming")
+
+    with heating_tabs[1]:
+        st.write("Decentrale verwarming")
+
+    with heating_tabs[2]:
+        st.write("Collectieve verwarming")
+
         st.markdown("### Centrale verwarming — basisprincipe")
         st.write(
             "Centrale verwarming werkt zo: een ketel verwarmt water tot hoge temperatuur. "
